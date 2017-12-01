@@ -223,35 +223,6 @@
                         filter: alpha(opacity=75);
                     }
     </style>
-  <script>
-        (function () {
-            function Router() {
-                this.routes = {};
-                this.currentUrl = '';
-            }
-
-            Router.prototype = {
-                route: function (path, callback) {
-                    this.routes[path] = callback || function () { };
-                },
-                refresh: function () {
-                    this.currentUrl = location.hash.slice(1) || '/';
-                    this.routes[this.currentUrl]();
-                },
-                init: function () {
-                    window.addEventListener("load", this.refresh.bind(this), false);
-                    window.addEventListener("hashchange", this.refresh.bind(this), false);
-                }
-            };
-            window.Router = new Router();
-            window.Router.init();
-
-        })();
-
-        Router.route('/home', function () {
-            location.href = "/view/home/index.html";
-        }
-    </script>
 
     <title>iRIS2000</title>
 </head>
@@ -598,7 +569,7 @@
         function exit() {
             window.location.href = "../login/index.html";
             if (lname)
-                xabg.clearCookie(lname);
+                xabg.clearCookie('loginname');
         }
 
         function btn_macui_close() {

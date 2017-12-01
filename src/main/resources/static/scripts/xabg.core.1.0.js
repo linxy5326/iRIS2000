@@ -99,7 +99,7 @@
     }
     //清除cookie
     function clearCk(cname) {
-        setCookie(cname, "", -1);
+    	setCk(cname, "", -1);
     }
 
     xabg.ns("xabg.core");

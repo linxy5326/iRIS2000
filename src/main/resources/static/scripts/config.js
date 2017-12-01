@@ -8,7 +8,7 @@
         return new _webApi.fn.init(selector, context, fn);
     };
 
-    var baseUrl = "http://localhost:8080/api";
+    var baseUrl = "http://iris2000.neuseer.cn/api";
 
     var url, _fn;
     var api_err;
