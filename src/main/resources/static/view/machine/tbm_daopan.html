@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="../../scripts/jquery-3.2.1/jquery-3.2.1.js"></script>
+    <script src="../../scripts/xabg.core.1.0.js"></script>
+    <title>刀盘系统</title>
+    <style type="text/css">
+        canvas {
+            overflow: hidden;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+</html>
+<script src="../../scripts/lib/machine-ui/daopan-1.1.0.js"></script>
+<script type="text/javascript">
+
+    (function () {
+
+        var data = {
+            //刀盘
+            dp_tjsd: 30, dp_nj: 100, dp_ztl: 50, dp_grd: 0, dp_cwl: 10, dp_ctl: 3,
+            dp_zx: 0, dp_zs: 1.45, dp_clyw: 35.7, dp_tjyy: 15, dp_tjtiem: 10, dp_ty1: 5.1,
+            dp_ty2: 5.2, dp_ty3: 5.3, dp_ty4: 5.4, dp_ty5: 5.5, dp_ty6: 5.6, lx_zs: 5,
+            lx_nj: 10, lx_q_pre: 5, lx_h_pre: 6, lx_s_kd: 15, lx_x_kd: 18,
+            //油缸
+            yg_a_pre: 5, yg_b_pre: 5.876, yg_c_pre: 5, yg_d_pre: 5, yg_a_dis: 5, yg_b_dis: 5,
+            yg_c_dis: 123, yg_d_dis: 1342, ep_n_pre: 8, ep_w_pre: 9, hwb_n_pre: 5, heb_w_pre: 6,
+            //注浆
+            sc_count: 15, sc_l1: 1, sc_l2: 2, sc_l3: 3, sc_l4: 4,
+            sc_pre1: 1, sc_pre2: 2, sc_pre3: 3, sc_pre4: 4,
+            //铰接 压力
+            h_pre1: 1, h_pre2: 2, h_pre3: 3, h_pre4: 4,
+            //行程
+            h_dis1: 10, h_dis2: 20, h_dis3: 30, h_dis4: 40,
+            //上下角度
+            ang_ud: 6,
+            //左右角度
+            ang_lr: 14,
+            prodata: {
+                name: "推进系统",
+                proname: "1号线[2标段]",
+                secline: "碧城东路~同风路区间-右线",
+                tbm: {
+                    name: "CREC1811",
+                    workstate: "掘进",
+                    tjlc: 1560,
+                    tjring: 890
+                }
+            },
+            war: { err: ["刀盘液压油温异常", "密封油脂低于下限", "推力过大"] }
+        };
+        var sX = 0, sY = 0, cfg = {
+            x: 0, y: 0, width: 1920, height: 1080, s_x: 0.5, s_y: 0.4, bgcolor: "#03063D"
+        };
+        var daopan;
+
+
+        $(function () {
+            init_daopan();
+        });
+
+
+
+        $(window).resize(function () {
+            init_daopan();
+        });
+
+        function init_daopan() {
+
+            var cas_main = document.getElementById("canvas"),
+                context = cas_main.getContext("2d");
+
+            var width = $("#hBox").width();
+            var height = $("#hBox").height();
+
+            if (!width || !height) {
+                width = document.documentElement.clientWidth;
+                height = document.documentElement.clientHeight;
+
+            }
+            sX = (width / cfg.width), sY = (height / cfg.height);
+
+            //设置画布宽和高
+            cas_main.width = width;
+            cas_main.height = height;
+
+            daopan = new mui.daopan({ g: context, cfg: cfg });
+            daopan.setbg("#03063D");
+            daopan.scale(sX, sY);
+            daopan.data = data;
+            daopan.init();
+            daopan.setdata();
+        }
+    })();
+</script>

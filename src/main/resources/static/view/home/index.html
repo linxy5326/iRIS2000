@@ -1,0 +1,608 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link href="../../css/main.css" rel="stylesheet" />
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=RhVqt8FhC2LvUTWdYFDQpmeM"></script>
+    <script type="text/javascript" src="../../scripts/jquery-1.10.2/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../../scripts/jsecurity-1.0.min.js"></script>
+    <script src="../../scripts/xabg.core.1.0.js"></script>
+
+    <style>
+        p {
+            font-family: 'Microsoft YaHei';
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .display {
+            display: block;
+        }
+
+        .display_no {
+            display: none;
+        }
+
+        .start .cur-pro {
+            position: absolute;
+            width: 300px;
+            height: 30px;
+            line-height: 24px;
+            margin: 22px 0px 0px 50px;
+            text-align: center;
+            display: inline-block;
+        }
+
+            .start .cur-pro:hover {
+                color: #ffd800;
+                cursor: pointer;
+            }
+
+        .hbox {
+            position: relative;
+            margin: 0px auto;
+            width: 1152px;
+            height: 648px;
+        }
+
+        .hboxContainer {
+            position: absolute;
+            left: 0px;
+            top: 100px;
+            width: 100%;
+            display: none;
+        }
+
+        .hbox .content {
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .hbox .title-bar {
+            position: absolute;
+            width: 100%;
+            height: 25px;
+            z-index: 9999;
+        }
+
+            .hbox .title-bar .close, .hbox .title-bar .max {
+                float: right;
+                width: 20px;
+                height: 20px;
+            }
+
+            .hbox .title-bar .max {
+                width: 20px;
+                height: 20px;
+            }
+
+        .hbox .hbox-left {
+            position: absolute;
+            background: #333333;
+            top:0px;
+            width: 200px;
+            height: 100%;
+            opacity: 0.96;
+            -moz-opacity: 0.96;
+            -webkit-opacity: 0.96;
+            font-size: 12px;
+        }
+
+            .hbox .hbox-left li {
+                line-height: 28px;
+                background: #007ACC;
+                margin-top: 1px;
+            }
+
+                .hbox .hbox-left li span {
+                    margin: 0px 20px;
+                    color: #fff;
+                }
+
+                    .hbox .hbox-left li span:hover {
+                        color: #ffd800;
+                        cursor: pointer;
+                    }
+
+        .hbox .hbox-title {
+            height: 30px;
+        }
+
+        .title-bar .max:hover, .close:hover {
+            background-color: #0094ff;
+            opacity: 0.5;
+            -moz-opacity: 0.5;
+            -webkit-opacity: 0.5;
+            cursor: pointer;
+        }
+
+
+
+        .prolist .sec-item {
+            list-style: none;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        ul li {
+            list-style: none;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .pro-item {
+        }
+
+        .caption {
+            height: 30px;
+            line-height: 28px;
+            background: #092d61 url(../images/list/list-item.png) no-repeat 10px;
+        }
+
+            .caption:hover {
+                background-color: #0068ff;
+                cursor: pointer;
+            }
+
+        .sec-item {
+            line-height: 28px;
+            font-size: 12px;
+        }
+
+
+            .sec-item div {
+                padding-left: 10px;
+                background-color: #061b51;
+                cursor: pointer;
+            }
+
+                .sec-item div:hover {
+                    background-color: #0068ff;
+                }
+
+            .sec-item .line {
+                height: 28px;
+                line-height: 28px;
+                background-color: #091144;
+            }
+
+                .sec-item .line a {
+                    margin-left: 50px;
+                }
+
+                    .sec-item .line a:hover {
+                        color: #ffd800;
+                        cursor: pointer;
+                    }
+
+        .copyright-box {
+            position: absolute;
+            bottom: 0px;
+            width: 400px;
+            height: 70px;
+            margin-left: 50px;
+            overflow: hidden;
+            left: 650px;
+        }
+
+            .copyright-box p {
+                line-height: 20px;
+            }
+
+            .copyright-box a:hover, .copyright-box a:link, .copyright-box a:visited, .copyright-box a:active {
+                color: #25d4ff;
+            }
+
+        .tbm-info-box {
+            position: absolute;
+            width: 350px;
+            color: #05054e;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+            .tbm-info-box ul {
+                padding: 5px 2px;
+            }
+
+                .tbm-info-box ul li {
+                    padding: 0 5px;
+                    margin: 0;
+                }
+
+                    .tbm-info-box ul li span {
+                        display: inline-block;
+                        padding: 2px 0;
+                        width: 5pc;
+                        height: 20px;
+                        text-align: right;
+                        opacity: .75;
+                        filter: alpha(opacity=75);
+                    }
+    </style>
+    <title>iRIS2000</title>
+</head>
+<body>
+    <!--[if lt IE 9]>
+    <div class="for-ie-suckers">
+        <div class="container">
+            <strong>您正在使用低版本 IE 浏览器，</strong> 在本页面的显示效果可能有差异。建议您升级到：IE 9.0+ 以上。
+        </div>
+    </div>
+    <![endif]-->
+
+    <div class="mainContainer">
+        <div class="sysinfo">
+            <img class="sys-logo" src="../../images/logo.png" />
+            <div class="sys-title">
+                <p>BG-IRIS2000</p>
+                <p>盾构（TBM）施工风险与信息综合管理系统</p>
+            </div>
+        </div>
+        <div class="start">
+            <div class="btn_start"></div>
+            <div class="cur-pro" data-position=""></div>
+        </div>
+        <div class="copyright-box">
+            <p>版权所有：西安比格数据科技有限公司&nbsp;&nbsp;网址：<a href="http://www.xabige.com">http://www.xabige.com</a></p>
+            <p>电话：029-81136780</p>
+            <p>地址：西安市高新区唐延南路11号逸翠园i都会4号楼1单元22层2210室</p>
+        </div>
+        <div class="setinfo">
+            <div class="btn_setting"></div>
+        </div>
+        <div class="leftline"></div>
+        <div class="rightline"></div>
+        <div class="times"><div class="time"></div><div class="date"></div></div>
+        <div class="userinfo">
+            <ul>
+                <li class="user"><a>你好！rong</a></li>
+                <li class="out"><a>退出系统</a></li>
+            </ul>
+        </div>
+        <!--百度地图-->
+        <div id="allmap" class="mapContainer"></div>
+        <div class="hboxContainer">
+            <div id="hBox" class="hbox">
+                <div class="title-bar">
+                    <img class="close" src="../../images/mac/close.png" />
+                    <img class="max" src="../../images/mac/move.png" />
+                </div>
+                <div class="content"></div>
+                <div class="hbox-left" style="display:none;">
+                    <div class="hbox-title"></div>
+                    <ul>
+                        <li data-url="../machine/tbm_daopan.html"><span>推进系统</span></li>
+                        <li data-url="../machine/tbm_guide.html"><span>导向系统</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="project" class="projectComponent display_no">
+            <div class="tab back">
+                <img src="../../images/list/list-icon-pro.png" />
+                <span>施工项目</span>
+            </div>
+            <div class="side">
+                <div id="prolist" class="content">
+                    <div class="title"><span>城轨公司交通建设项目</span></div>
+                    <ul>
+                        <li>
+                            <div class="pro caption" data-id="17110001" data-position="108.852502,34.17779" data-name="西安市6号线二标三区段"><span>西安市6号线二标三区段</span></div>
+                            <ul class="display_no">
+                                <li class="sec-item">
+                                    <div class="caption" data-id="17110001001"><span>西部大道站～韦斗路站区间</span></div>
+                                    <ul class="display_no">
+                                        <li class="sec-item line" data-id="1711000100101" data-position="108.853009, 34.171603">
+                                            <a>西~韦区间-左线</a>
+                                        </li>
+                                        <li class="sec-item line" data-id="1711000100102" data-position="108.852588, 34.175393">
+                                            <a>西~韦区间-右线</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="opercenter" class="operComponent display_no">
+            <div class="tab">
+                <img src="../../images/list/list-icon-set.png" />
+                <span>操作中心</span>
+            </div>
+            <div class="side">
+                <div class="alert-content">
+                    <div class="title"><span>超限报警</span></div>
+                    <ul class="item">
+                        <li class="open">
+                            <div class="caption">
+                                <span>沉降报警</span>
+                                <img class="del" src="../../images/list/list-icon-del.png" alt="移除消息" />
+                            </div>
+                            <ul class="sub-item">
+                                <li>
+                                    <a>报警信息1</a><span>10:00:00 11/12</span>
+                                </li>
+                                <li>
+                                    <a>报警信息1</a><span>10:00:00 11/12</span>
+                                </li>
+                                <li>
+                                    <a>报警信息1</a><span>10:00:00 11/12</span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="open">
+                            <div class="caption"><span>掘进参数报警</span></div>
+                            <ul class="sub-item">
+                                <li>
+                                    <a>报警信息1</a><span>10:00:00 11/12</span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="icon-content">
+                    <div class="header">
+                        <img class="next" src="../../images/list/list-next.png" alt="下翻" />
+                        <img class="last" src="../../images/list/list-last.png" alt="上翻" />
+                    </div>
+                    <ul>
+                        <li>
+                            <img src="../../images/list/list-button-equ.png" />
+                            <a>设备信息</a>
+                        </li>
+                        <li>
+                            <img src="../../images/list/list-button-construct.png" />
+                            <a>施工支持系统</a>
+                        </li>
+                        <li>
+                            <img src="../../images/list/list-button-set.png" />
+                            <a>设置</a>
+                        </li>
+                        <li>
+                            <img src="../../images/list/list-button-user.png" />
+                            <a>帮助</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--子菜单  <li class="menu-item submenu"></li> 图标加 <i></> -->
+    <menu class="menu">
+        <li class="menu-item">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">施工日志</span>
+            </button>
+        </li>
+        <li class="menu-item disabled">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">施工平面图</span>
+            </button>
+        </li>
+
+        <li class="menu-item">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">施工断面图</span>
+            </button>
+        </li>
+        <li class="menu-separator"></li>
+        <li class="menu-item">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">施工风险源</span>
+            </button>
+        </li>
+        <li class="menu-item">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">地面沉降分析</span>
+            </button>
+        </li>
+        <li class="menu-separator"></li>
+        <li class="menu-item">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">施工进度分析</span>
+            </button>
+        </li>
+
+
+        <li class="menu-item">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">施工效率分析</span>
+            </button>
+        </li>
+
+        <li class="menu-item">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">盾构施工轨迹分析</span>
+            </button>
+        </li>
+        <li class="menu-item">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">管片拼装质量分析</span>
+            </button>
+        </li>
+        <li class="menu-item">
+            <button type="button" class="menu-btn">
+                <span class="menu-text">材料消耗分析</span>
+            </button>
+        </li>
+    </menu>
+</body>
+</html>
+<script src="../../scripts/lib/baidu-map/bidumap-dev-1.0.js"></script>
+<script src="../../scripts/lib/baidu-map/tbm-bmap.1.0.js"></script>
+<script>
+    !function () {
+        var start_show, set_show;
+        var lname;
+
+        $(function () {
+            document.oncontextmenu = function () {
+                return false;
+            };
+            //获取已登录用户
+            lname = xabg.getCookie("loginname");
+            if (lname)
+                $(".user").children("a").empty().html("你好！" + lname);
+            else {
+                 exit();
+            }
+
+            //注册事件
+            $(".btn_start").on('click', btn_start);
+            $(".btn_setting").on('click', btn_setting);
+            $(".out").on('click', exit);
+            $(".hbox .title-bar .close").on("click", btn_macui_close);
+            $(".hbox .title-bar .max").on("click", btn_macui_max);
+
+            $(".hbox").on("click", function (e) {
+                var x = e.offsetX, y = e.offsetY;
+
+                if (x < 50 && y > 20) {
+                    //$(".hbox-left").show("slow");
+                    $(".hbox-left").animate({ width: 'toggle' });
+                    //$(".hbox-left").width(200);
+                }          
+            });
+
+            $(".hbox-left").on("mouseout", function (e) {
+                e.preventDefault();
+                var e = e || window.event;
+                var obj = e.toElement || e.relatedTarget, pa = this;
+                if (pa.contains(obj)) return false; 
+                $(".hbox-left").hide("slow", function () {
+                    this.width = "200px";
+                });
+            });
+
+            $(".hbox-left li").on("click", function (e) {
+ 
+                $.ajax($(this).data("url"), {
+                    type: "GET", success: function (d) {
+                        $("#hBox .content").empty().html(d);
+                    }
+                });
+            });
+
+            $(".pro.caption").click(function (e) {
+                if ($(this).next().attr("class").indexOf("display_no") > -1) {
+                    $(this).next().removeClass("display_no");
+                }
+                else {
+                    $(this).next().addClass("display_no");
+                }
+
+                btn_select_por($(this), e);
+            });
+
+            $(".sec-item>.caption").click(function (e) {
+                if ($(this).next().attr("class").indexOf("display_no") > -1) {
+                    $(this).next().removeClass("display_no");
+                }
+                else {
+                    $(this).next().addClass("display_no");
+                }
+            });
+
+            var login_time = 0;
+
+            //更新当前时间
+            xabg.delay(1, function () {
+                var date = new Date();
+                var time_s = date.getHours() + ":" + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes());
+                var date_s = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
+                $(".time").empty().html(time_s);
+                $(".date").empty().html(date_s);
+
+                login_time++;
+                if (login_time == 20) {
+                    lname = xabg.getCookie("loginname");
+                    if (!lname) {
+                        exit();
+                    }
+                }
+            }, 1);
+
+            drag();
+        });
+
+        function btn_start() {
+            if (start_show) {
+                start_show = false;
+                $("#project").addClass("display_no");
+            }
+            else {
+                $("#project").removeClass("display_no");
+                start_show = true;
+            }
+        }
+
+        /**
+         * 项目选择事件
+         * @param target
+         * @param e
+         */
+        function btn_select_por(target, e) {
+            var curpro = $(".cur-pro");
+            curpro.html(target.data("name"));
+            curpro.data("position", target.data("position"));
+        }
+
+        function btn_setting() {
+            if (set_show) {
+                set_show = false;
+                $("#opercenter").addClass("display_no");
+            }
+            else {
+                $("#opercenter").removeClass("display_no");
+                set_show = true;
+            }
+        }
+
+        function exit() {
+            window.location.href = "../login/index.html";
+            if (lname)
+                xabg.clearCookie(lname);
+        }
+
+        function btn_macui_close() {
+            // $(".hboxContainer").animate({width:"toggle"});
+            $(".hbox .content").empty();
+            $(".hboxContainer").css("display", "none");
+        }
+
+        function btn_macui_max() {
+            var url = "../machine/tbm_daopan.html";
+            xabg.openWin({ url: url, title: "推进系统" });
+            $(" .hbox .content").empty();
+            $(" .hboxContainer").css("display", "none");
+        }
+
+
+        function drag() {
+
+            //$(".hbox .title-bar").mousedown(
+            //    function (event) {
+            //        var isMove = true;
+            //        var abs_x = event.pageX - $('div.hbox').offset().left;
+            //        var abs_y = event.pageY - $('div.hbox').offset().top;
+            //        $(document).mousemove(function (event) {
+            //            if (isMove) {
+            //                var obj = $('div.hbox');
+            //                obj.css({ 'left': event.pageX - abs_x, 'top': event.pageY - abs_y });
+            //            }
+            //        }
+            //        ).mouseup(function () {
+            //            isMove = false;
+            //        });
+            //    }
+            //);
+        }
+    }();
+</script>

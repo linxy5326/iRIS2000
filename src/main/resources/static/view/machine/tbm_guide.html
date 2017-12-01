@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="../../scripts/jquery-3.2.1/jquery-3.2.1.js"></script>
+    <script src="../../scripts/xabg.core.1.0.js"></script>
+    <script src="../../scripts/lib/machine-ui/ui-base-1.0.0.js"></script>
+    <title></title>
+    <style type="text/css">
+        body, canvas {
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+</html>
+<script src="../../scripts/lib/machine-ui/guide-1.1.0.js"></script>
+<script type="text/javascript">
+
+    !function () {
+        var guide;
+        var realData = {
+            name: "导向系统",
+            time: "2017年11月25 11：03",
+            ets: "上海精密仪器制造厂",
+            ergs: "上海米度",
+            prodata: {
+                name: "导向系统",
+                proname: "西安市6号线二标三区段",
+                secline: "西部大道站～韦斗路站区间-右线",
+                tbm: {
+                    name:"CREC1811",
+                    workstate: "掘进",
+                    tjlc: 1560,
+                    tjring: 890
+                }
+            },
+            war: { err: ["刀盘液压油温异常", "密封油脂低于下限", "推力过大"] },
+            dx: {
+                x: 0, y: 0, ex: 0, ey: 0, roll: 0, pitch: 0,
+                h_pc: 0, v_pc: 0, qk_h: 0, dz_h: 0, dw: 0, qk_v: 0, dz_v: 0, dw_v: 0,
+                a_xc: 0, b_xc: 0, c_xc: 0,
+                d_xc: 0, a_xc: 10, b_xc: 10, c_xc: 10, d_xc: 10,
+                tjlc: 1800, dqlc: 156, ring: 890, ring_count: 1110, qklc: 1560, dwlc: 1552, tjjd: 80
+            }
+        };
+
+        $(function () {
+
+            init_guide();
+        });
+        var sX = 0, sY = 0, cfg = {
+            x: 0, y: 0, width: 1920, height: 1080, s_x: 0.5, s_y: 0.4, bgcolor: "#03063D"
+        };
+        function init_guide() {
+
+
+            var cas_main = document.getElementById("canvas"),
+                context = cas_main.getContext("2d");
+
+            var width = $("#hBox").width();
+            var height = $("#hBox").height();
+
+            if (!width || !height) {
+                width = document.documentElement.clientWidth;
+                height = document.documentElement.clientHeight;
+
+            }
+            sX = (width / cfg.width), sY = (height / cfg.height);
+
+            //设置画布宽和高
+            cas_main.width = width;
+            cas_main.height = height;
+
+            guide = new mui.guide({ g: context, cfg: cfg });
+            guide.data = realData;
+            guide.setbg(cfg.bgcolor);
+            guide.scale(sX, sY);
+            guide.init().setdata();
+        }
+
+
+        //定时获取数据
+        xabg.delay(5,function () {
+
+            var num1 = Math.round(Math.random() * 100),
+                num2 = Math.round(Math.random() * 50),
+                num3 = Math.random().toFixed(2),
+                num4 = Math.random().toFixed(2),
+                num5 = Math.random().toFixed(2) * 10;
+
+            realData.dx.x = num1;
+            realData.dx.y = num2;
+            realData.dx.ex = 0 - num1;
+            realData.dx.ey = 0 - num2;
+
+            realData.dx.roll = (num3 * 4).toFixed(2);
+            realData.dx.pitch = (num4 * 5).toFixed(2);
+
+            realData.dx.h_pc = num3;
+            realData.dx.v_pc = num4;
+            realData.dx.qk_h = num1;
+            realData.dx.dw_h = num2;
+            realData.dx.qk_v = num1;
+            realData.dx.dw_v = num2;
+
+            realData.dx.a_xc = num1 * 10;
+            realData.dx.b_xc = num2 * 70;
+            realData.dx.c_xc = num1 * 90;
+            realData.dx.d_xc = num2 * 50;
+
+            guide.erasebg();
+            guide.setbg(cfg.bgcolor);
+            guide.data = realData;
+            guide.init().setdata();
+
+        }, 1);
+    }();
+</script>

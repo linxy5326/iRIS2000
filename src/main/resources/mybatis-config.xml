@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!--   springboot 和mybatis  整合，不需要配置 数据库这节
+<configuration>
+<typeAliases>
+        <typeAlias alias="City" type=" com.iris.monitor.entity.City" />
+    </typeAliases>
+
+<environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://localhost:3306/springbootdb" />
+                <property name="username" value="root" />
+                <property name="password" value="mysql@1808" />
+            </dataSource>
+        </environment>
+    </environments>
+    
+    <mappers>  
+      <mapper resource="com.iris.monitor.entity/City.xml"/>  
+      <mapper class="com.iris.monitor.mapper.CityDao"></mapper>  
+  </mappers>  
+    
+</configuration>
+ -->
