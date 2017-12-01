@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="scripts/config.js"></script>
+    <title></title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    (function () {
+        function Router() {
+            this.routes = {};
+            this.currentUrl = '';
+        }
+
+        Router.prototype = {
+            route: function (path, callback) {
+                this.routes[path] = callback || function () { };
+            },
+            refresh: function () {
+                this.currentUrl = location.hash.slice(1) || '/';
+                this.routes[this.currentUrl]();
+            },
+            init: function () {
+                window.addEventListener("load", this.refresh.bind(this), false);
+                window.addEventListener("hashchange", this.refresh.bind(this), false);
+            }
+        };
+        window.Router = new Router();
+        window.Router.init();
+
+    })();
+
+    !function () {
+
+        Router.route('/', function () {
+            location.href = "/view/login/index.html";
+        });
+    }();
+
+</script>

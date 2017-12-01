@@ -12,6 +12,6 @@ public class LoginController {
 	public String index(HttpServletRequest request) {  
         //逻辑处理  
         //request.setAttribute("key", "hello world");  
-		return "forward:view/login/index.html";
+		return "index.html";
     }
 }
