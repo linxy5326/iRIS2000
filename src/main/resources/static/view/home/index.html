@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../../scripts/jsecurity-1.0.min.js"></script>
     <script src="../../scripts/xabg.core.1.0.js"></script>
 
+
     <style>
         p {
             font-family: 'Microsoft YaHei';
@@ -46,6 +47,7 @@
             margin: 0px auto;
             width: 1152px;
             height: 648px;
+          
         }
 
         .hboxContainer {
@@ -54,11 +56,13 @@
             top: 100px;
             width: 100%;
             display: none;
+/*设置鼠标穿透*/
+            pointer-events:none;
         }
 
         .hbox .content {
             overflow: hidden;
-            pointer-events: none;
+            pointer-events: auto;
         }
 
         .hbox .title-bar {
@@ -66,6 +70,7 @@
             width: 100%;
             height: 25px;
             z-index: 9999;
+            pointer-events: auto;
         }
 
             .hbox .title-bar .close, .hbox .title-bar .max {
@@ -82,7 +87,7 @@
         .hbox .hbox-left {
             position: absolute;
             background: #333333;
-            top:0px;
+            top: 0px;
             width: 200px;
             height: 100%;
             opacity: 0.96;
@@ -451,7 +456,7 @@
             if (lname)
                 $(".user").children("a").empty().html("你好！" + lname);
             else {
-                 exit();
+                exit();
             }
 
             //注册事件
@@ -468,21 +473,21 @@
                     //$(".hbox-left").show("slow");
                     $(".hbox-left").animate({ width: 'toggle' });
                     //$(".hbox-left").width(200);
-                }          
+                }
             });
 
             $(".hbox-left").on("mouseout", function (e) {
                 e.preventDefault();
                 var e = e || window.event;
                 var obj = e.toElement || e.relatedTarget, pa = this;
-                if (pa.contains(obj)) return false; 
+                if (pa.contains(obj)) return false;
                 $(".hbox-left").hide("slow", function () {
                     this.width = "200px";
                 });
             });
 
             $(".hbox-left li").on("click", function (e) {
- 
+
                 $.ajax($(this).data("url"), {
                     type: "GET", success: function (d) {
                         $("#hBox .content").empty().html(d);
@@ -569,7 +574,7 @@
         function exit() {
             window.location.href = "../login/index.html";
             if (lname)
-                xabg.clearCookie('loginname');
+                xabg.clearCookie("loginname");
         }
 
         function btn_macui_close() {
@@ -587,23 +592,27 @@
 
 
         function drag() {
+            $(".hbox .title-bar").mousedown(function (event) {
+                $(this).css("cursor", "move");
+                var isMove = true;
+             
+                var x = $('div.hbox')[0].offsetLeft, y = $('div.hbox')[0].offsetTop;//y坐标
+                var s_x = event.clientX+x;
+                var s_y = event.clientY+y;
+                console.log(x); console.log(y);
+                $(document).on("mousemove", function (event) {
+                    if (isMove) {
+                        var obj = $('div.hbox');//x坐标
 
-            //$(".hbox .title-bar").mousedown(
-            //    function (event) {
-            //        var isMove = true;
-            //        var abs_x = event.pageX - $('div.hbox').offset().left;
-            //        var abs_y = event.pageY - $('div.hbox').offset().top;
-            //        $(document).mousemove(function (event) {
-            //            if (isMove) {
-            //                var obj = $('div.hbox');
-            //                obj.css({ 'left': event.pageX - abs_x, 'top': event.pageY - abs_y });
-            //            }
-            //        }
-            //        ).mouseup(function () {
-            //            isMove = false;
-            //        });
-            //    }
-            //);
+                        obj.css({ 'left': event.clientX - s_x+x, 'top': event.clientY - s_y+y });
+                    }
+                });
+                $(document).mouseup(function () {
+                    isMove = false;
+                    $(".hbox .title-bar").css("cursor", "default");
+            $(this).unbind("mousemove");
+                });
+            });
         }
     }();
 </script>
